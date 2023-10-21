@@ -5,6 +5,9 @@ pragma solidity >= 0.6.0 < 0.9.0;
 
 import {PriceConverter} from "./PriceConverter.sol";
 
+// added this import because of the getVersion() function I added newly
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
 error FundMe__NotOwner();
 
 contract FundMe {
@@ -76,8 +79,14 @@ contract FundMe {
         require(callSucess, "Call failed!");
     }
 
+    // added this function so I can practice writing tests
+    function getVersion() public view returns (uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        return priceFeed.version();
+    }
+
     modifier onlyOwner() {
-        if(msg.sender != i_owner) {
+        if (msg.sender != i_owner) {
             revert FundMe__NotOwner();
         }
         _;

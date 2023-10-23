@@ -5,10 +5,11 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/Ag
 
 library PriceConverter {
     // function to get the price of ethereum in usd
-    function getPrice() internal view returns (uint256) {
+    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
         // Address 0x694AA1769357215DE4FAC081bf1f309aDC325306
         // ABI
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        // refactory 3
+        // AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         (, int256 price,,,) = priceFeed.latestRoundData();
         // Price of ETH in USD
 
@@ -18,8 +19,8 @@ library PriceConverter {
     }
 
     // function to convert eth to usd
-    function getConversionRate(uint256 ethAmount) internal view returns (uint256) {
-        uint256 ethPrice = getPrice();
+    function getConversionRate(uint256 ethAmount, AggregatorV3Interface priceFeed) internal view returns (uint256) {
+        uint256 ethPrice = getPrice(priceFeed);
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
         // the reason for the 1e18 multiplication is because both ethPrice and ethAmount are in 1e18
         // and a result of their multiplication will result in 1e36, which is massive. Hence the need for the division

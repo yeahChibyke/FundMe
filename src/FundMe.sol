@@ -24,12 +24,16 @@ contract FundMe {
     // address for owner of the contract
     address public immutable i_owner;
 
-    constructor() {
+    // refactoring 1
+    AggregatorV3Interface private s_priceFeed;
+
+    constructor(address priceFeed) {
         i_owner = msg.sender;
+        s_priceFeed = AggregatorV3Interface(priceFeed);
     }
 
     function fund() public payable {
-        require(msg.value.getConversionRate() >= MINIMUM_USD, "Send enough ETH!");
+        require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "Send enough ETH!");
         // to keep track of funders, we use the global variable; msg.sender which keeps track of whoever called the fund function
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
@@ -81,13 +85,14 @@ contract FundMe {
 
     // added this function so I can practice writing tests
     function getVersion() public view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
-        return priceFeed.version();
+        // AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        // refactory 2
+        return s_priceFeed.version();
     }
 
     // added this function to test casting
-    function getMinUsd() public pure returns(uint256) {
-      return MINIMUM_USD;
+    function getMinUsd() public pure returns (uint256) {
+        return MINIMUM_USD;
     }
 
     modifier onlyOwner() {

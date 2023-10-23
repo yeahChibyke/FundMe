@@ -21,11 +21,11 @@ contract FundMeTest is Test {
         console.log(msg.sender);
         // assertEq(fundMe.i_owner(), msg.sender);
         // This test will fail because FundMeTest is the contract that deployed the fundMe address
-        // in the setUp(); function, hence it will be the owner
+          // in the setUp(); function, hence it will be the owner
         // While in this particular function, msg.sender is whoever is calling the FundMeTest
-        // i.e., Us ->(calls) FundMeTest ->(deploys) fundMe
-        // msg.sender = us
-        // fundMe.i_owner = FundMeTest
+          // i.e., Us ->(calls) FundMeTest ->(deploys) fundMe
+          // msg.sender = us
+          // fundMe.i_owner = FundMeTest
         assertEq(fundMe.i_owner(), address(this));
     }
 

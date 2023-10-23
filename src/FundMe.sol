@@ -85,6 +85,11 @@ contract FundMe {
         return priceFeed.version();
     }
 
+    // added this function to test casting
+    function getMinUsd() public pure returns(uint256) {
+      return MINIMUM_USD;
+    }
+
     modifier onlyOwner() {
         if (msg.sender != i_owner) {
             revert FundMe__NotOwner();
